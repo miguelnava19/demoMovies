@@ -19,6 +19,13 @@ public interface ApiInterface {
             @Query("page") int page
     );
 
+    @GET("/3/discover/movie")
+    public Call<Response> findAll(
+            @Query("api_key") String api_key,
+            @Query("language") String language,
+            @Query("page") int page
+    );
+
     @GET("discover/tv/{id}")
     public Call<Response> find(@Path("id") String id);
 }

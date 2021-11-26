@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.moviesdemo.interfaces.MovieApi;
 import com.example.moviesdemo.models.Movie;
 import com.example.moviesdemo.models.Response;
 import com.example.moviesdemo.rest.ApiClient;
@@ -27,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements Connectable, Disconnectable, Bindable {
     private Merlin merlin;
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private RecyclerViewAdapter adapter;
 
     String API_KEY = "63d5d9e3339a7cd0bb24b220d0473ab5";
     String LANGUAGE = "en-US";
@@ -45,29 +44,27 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
         merlin.registerConnectable(this);
         merlin.registerDisconnectable(this);
 
-        recyclerView = findViewById(R.id.recyclerFavorites);
+        recyclerView = findViewById(R.id.list_movie_favorite);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void CallRetrofit() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Response> call = apiInterface.getMovie(CATEGORY, API_KEY, LANGUAGE, PAGE);
-       call.enqueue(new Callback<Response>() {
-           @Override
-           public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-               List<Movie> movieList = response.body().getResults();
-               recyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, movieList);
-               recyclerView.setAdapter(recyclerViewAdapter);
-           }
+        Call<Response> call = apiInterface.findAll(API_KEY, LANGUAGE, PAGE);
+        call.enqueue(new Callback<Response>() {
+            @Override
+            public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                List<Movie> movieList = response.body().getResults();
+                adapter = new RecyclerViewAdapter(MainActivity.this, movieList);
+                recyclerView.setAdapter(adapter);
+            }
 
-           @Override
-           public void onFailure(Call<Response> call, Throwable t) {
+            @Override
+            public void onFailure(Call<Response> call, Throwable t) {
 
-           }
-       });
+            }
+        });
     }
 
 
