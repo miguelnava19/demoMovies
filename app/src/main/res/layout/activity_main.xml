@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
 
     <ScrollView
@@ -24,117 +24,146 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
                 android:layout_marginTop="30dp"
                 android:text="Favorite Movies"
                 android:textColor="#151729"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_movie_favorite"
-                android:layout_width="800dp"
-                android:layout_height="206dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="406dp"
+                android:layout_height="250dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt1"/>
+                app:layout_constraintTop_toBottomOf="@+id/txt1">
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:id="@+id/txt2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Recommendations"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
+                android:text="Recommendations movies"
                 android:textColor="#151729"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/txt1"
-                app:layout_constraintTop_toBottomOf="@+id/list_tv_favorites" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_movie_favorite" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_movie_recommendations"
-                android:layout_width="409dp"
-                android:layout_height="206dp"
+                android:id="@+id/list_movie_recommendation"
+                android:layout_width="406dp"
+                android:layout_height="250dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt2"/>
+                app:layout_constraintTop_toBottomOf="@+id/txt2" >
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:id="@+id/txt3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Rated"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
+                android:text="Rated movies"
                 android:textColor="#151729"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/txt2"
-                app:layout_constraintTop_toBottomOf="@+id/list_tv_recommendations" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_movie_recommendation" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_movie_rated"
-                android:layout_width="409dp"
-                android:layout_height="206dp"
+                android:layout_width="406dp"
+                android:layout_height="250dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt3"/>
+                app:layout_constraintTop_toBottomOf="@+id/txt3" >
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:id="@+id/txt4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Favorites TV Shows"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
+                android:text="TV Favorites"
                 android:textColor="#151729"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/txt3"
-                app:layout_constraintTop_toBottomOf="@+id/list_tv_rated" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_movie_rated" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_tv_favorites"
-                android:layout_width="409dp"
-                android:layout_height="206dp"
+                android:id="@+id/list_tv_favorite"
+                android:layout_width="406dp"
+                android:layout_height="250dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt4"/>
+                app:layout_constraintTop_toBottomOf="@+id/txt4" >
+
+            </androidx.recyclerview.widget.RecyclerView>
+
 
             <TextView
                 android:id="@+id/txt5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Recommendations"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
+                android:text="TV Recommendations"
                 android:textColor="#151729"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/txt4"
-                app:layout_constraintTop_toBottomOf="@+id/list_tv_favorites" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_tv_favorite" />
+
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_tv_recommendations"
-                android:layout_width="409dp"
-                android:layout_height="206dp"
+                android:id="@+id/list_tv_recommendation"
+                android:layout_width="406dp"
+                android:layout_height="250dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt5"/>
+                app:layout_constraintTop_toBottomOf="@+id/txt5" >
+
+            </androidx.recyclerview.widget.RecyclerView>
 
 
             <TextView
                 android:id="@+id/txt6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Rated TV Shows"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
+                android:text="TV Rated"
                 android:textColor="#151729"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/txt5"
-                app:layout_constraintTop_toBottomOf="@+id/list_tv_recommendations" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/list_tv_recommendation" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_tv_rated"
-                android:layout_width="409dp"
-                android:layout_height="206dp"
+                android:layout_width="406dp"
+                android:layout_height="250dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt6"/>
+                app:layout_constraintTop_toBottomOf="@+id/txt6" >
+
+            </androidx.recyclerview.widget.RecyclerView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -1,6 +1,7 @@
 package com.example.moviesdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +11,18 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.moviesdemo.activity.DetalleActivity;
 import com.example.moviesdemo.models.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
     private final String TAG = this.getClass().getCanonicalName();
     private Context context;
     private List<Movie> movieList;
 
-    public RecyclerViewAdapter(Context context, List<Movie> movieList) {
+    public ListAdapter(Context context, List<Movie> movieList) {
         this.context = context;
         this.movieList = movieList;
         Log.i(TAG, " movieList --> " + movieList);
@@ -28,16 +30,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @NonNull
     @Override
-    public RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         view = inflater.inflate(R.layout.item, parent, false);
-        RecyclerViewAdapter.MyViewHolder holder = new RecyclerViewAdapter.MyViewHolder(view);
+        ListAdapter.MyViewHolder holder = new ListAdapter.MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListAdapter.MyViewHolder holder, int position) {
         final Movie movie = movieList.get(position);
         Picasso.get().load("https://image.tmdb.org/t/p/w500/" + movie.getPosterPath()).into(holder.imageView);
 
@@ -61,7 +63,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onClick(View v) {
             int pos = getLayoutPosition();
             final Movie movie = movieList.get(pos);
-            Log.i(TAG, "CLIKC EN LA VISTA img --> " + movie.getBackdropPath());
+            Log.i(TAG, "CLIKC EN LA VISTA img --> https://image.tmdb.org/t/p/w500/" + movie.getPosterPath());
+            Intent intent = new Intent(context, DetalleActivity.class);
+            intent.putExtra("id", movie.getId());
+            intent.putExtra("posterPath", "https://image.tmdb.org/t/p/w500/" + movie.getPosterPath());
+            intent.putExtra("overview", movie.getOverview());
+            intent.putExtra("originalTitle", movie.getOriginalTitle());
+            intent.putExtra("voteAverage", movie.getVoteAverage());
+            context.startActivity(intent);
         }
     }
 }
