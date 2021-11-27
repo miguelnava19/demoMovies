@@ -25,7 +25,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     public ListAdapter(Context context, List<Movie> movieList) {
         this.context = context;
         this.movieList = movieList;
-        Log.i(TAG, " movieList --> " + movieList);
+//        Log.i(TAG, " movieList --> " + movieList);
     }
 
     @NonNull
@@ -41,7 +41,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.MyViewHolder holder, int position) {
         final Movie movie = movieList.get(position);
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/" + movie.getPosterPath()).into(holder.imageView);
+        Picasso.get().load("https://image.tmdb.org/t/p/w500" + movie.getPosterPath()).into(holder.imageView);
 
     }
 
@@ -65,11 +65,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             final Movie movie = movieList.get(pos);
             Log.i(TAG, "CLIKC EN LA VISTA img --> https://image.tmdb.org/t/p/w500/" + movie.getPosterPath());
             Intent intent = new Intent(context, DetalleActivity.class);
-            intent.putExtra("id", movie.getId());
-            intent.putExtra("posterPath", "https://image.tmdb.org/t/p/w500/" + movie.getPosterPath());
-            intent.putExtra("overview", movie.getOverview());
-            intent.putExtra("originalTitle", movie.getOriginalTitle());
-            intent.putExtra("voteAverage", movie.getVoteAverage());
+            intent.putExtra("movie", movie);
             context.startActivity(intent);
         }
     }

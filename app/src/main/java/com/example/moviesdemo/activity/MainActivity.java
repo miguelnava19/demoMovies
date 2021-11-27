@@ -5,7 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moviesdemo.R;
@@ -15,18 +16,20 @@ import com.example.moviesdemo.models.Response;
 import com.example.moviesdemo.rest.ApiClient;
 import com.example.moviesdemo.rest.ApiInterface;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.novoda.merlin.Bindable;
 import com.novoda.merlin.Connectable;
 import com.novoda.merlin.Disconnectable;
 import com.novoda.merlin.Merlin;
 import com.novoda.merlin.NetworkStatus;
-
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import retrofit2.Call;
@@ -40,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
     String LANGUAGE = "en-US";
     String CATEGORY = "popular";
     int PAGE = 1;
+    int idMRec = 551;
+    int idTvRec = 90462;
+    TextView txtMFav;
+    TextView txtTVFav;
     RecyclerView recyclerViewMF;
     RecyclerView recyclerViewMRec;
     RecyclerView recyclerViewMRated;
@@ -57,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
         merlin.registerBindable(this);
         merlin.registerConnectable(this);
         merlin.registerDisconnectable(this);
+
+        txtMFav = findViewById(R.id.txt1);
+        txtTVFav = findViewById(R.id.txt4);
 
         recyclerViewMF = getRecycler(R.id.list_movie_favorite);
         recyclerViewMRec = getRecycler(R.id.list_movie_recommendation);
@@ -80,8 +90,6 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
             public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                 List<Movie> movieList = response.body().getResults();
                 String json = new Gson().toJson(movieList);
-
-                Log.i(TAG, "json --> " + json);
                 saveJson(json, nameFile);
                 adapter = new ListAdapter(MainActivity.this, movieList);
                 recyclerView.setAdapter(adapter);
@@ -130,10 +138,14 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
         }
     }
 
-    public void loadJson(String fileName) {
+    public String loadJson(String fileName) {
         FileInputStream fis = null;
 
         try {
+            File file = new File(getFilesDir() + "/" + fileName);
+            if (!file.exists()) {
+                return "";
+            }
             fis = openFileInput(fileName);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
@@ -143,13 +155,12 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
             while ((text = br.readLine()) != null) {
                 sb.append(text).append("\n");
             }
-//TODO asigamos el texto del archivo al json
-
+            return sb.toString();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         } finally {
             if (fis != null) {
                 try {
@@ -159,6 +170,56 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
                 }
             }
         }
+        return "";
+    }
+
+    public void getListFavorite(String nameFile, RecyclerView recyclerView, TextView textView) {
+        String json = loadJson(nameFile);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Movie>>() {
+        }.getType();
+        List<Movie> movieList = gson.fromJson(json, type);
+        if (movieList != null) {
+            if (nameFile.contains("movie"))
+                idMRec = movieList.get(0).getId();
+            else
+                idTvRec = movieList.get(0).getId();
+            adapter = new ListAdapter(MainActivity.this, movieList);
+            recyclerView.setAdapter(adapter);
+        } else {
+            recyclerView.setVisibility(View.GONE);
+            textView.setVisibility(View.GONE);
+        }
+    }
+
+
+    public void getListRecommendation(String nameFile, RecyclerView recyclerView) {
+        String json = loadJson(nameFile);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Movie>>() {
+        }.getType();
+        List<Movie> movieList = gson.fromJson(json, type);
+        if (movieList != null) {
+            adapter = new ListAdapter(MainActivity.this, movieList);
+            recyclerView.setAdapter(adapter);
+        } else
+            recyclerView.setVisibility(View.GONE);
+
+    }
+
+
+    public void getListRated(String nameFile, RecyclerView recyclerView) {
+        String json = loadJson(nameFile);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Movie>>() {
+        }.getType();
+        List<Movie> movieList = gson.fromJson(json, type);
+        if (movieList != null) {
+            adapter = new ListAdapter(MainActivity.this, movieList);
+            recyclerView.setAdapter(adapter);
+        } else
+            recyclerView.setVisibility(View.GONE);
+
     }
 
 
@@ -189,10 +250,13 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
     @Override
     public void onConnect() {
         Toast.makeText(getApplication(), "Conectado a Internet :)", Toast.LENGTH_SHORT).show();
-        getRecommendations("movie", recyclerViewMRec, 551);
+        getListFavorite("movie_favorite.txt", recyclerViewMF, txtMFav);
+        getListFavorite("tv_favorite.txt", recyclerViewTVF, txtTVFav);
+
+        getRecommendations("movie", recyclerViewMRec, idMRec);
         getRated("movie", recyclerViewMRated);
 
-        getRecommendations("tv", recyclerViewTVRec, 90462);
+        getRecommendations("tv", recyclerViewTVRec, idTvRec);
         getRated("tv", recyclerViewTVRated);
     }
 
@@ -203,6 +267,14 @@ public class MainActivity extends AppCompatActivity implements Connectable, Disc
             public void run() {
                 //TODO apartado para ocupar sin conexión a internet
                 Toast.makeText(getApplication(), "Desconectado a Internet :(", Toast.LENGTH_SHORT).show();
+                getListFavorite("movie_favorite.txt", recyclerViewMF, txtMFav);
+                getListFavorite("tv_favorite.txt", recyclerViewTVF, txtTVFav);
+
+                getListRecommendation("movie_recommendation.txt", recyclerViewMRec);
+                getListRecommendation("tv_recommendation.txt", recyclerViewTVRec);
+
+                getListRated("movie_rated.txt", recyclerViewMRated);
+                getListRated("tv_rated.txt", recyclerViewTVRated);
             }
         });
     }
